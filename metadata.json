@@ -1,0 +1,8 @@
+{
+  "name": "Calculadora Educacional de Escritório",
+  "description": "Calculadora de mesa com 5 operações básicas, visor duplo, explicação pedagógica em tempo real de porcentagens e mini-desafios matemáticos para o Ensino Fundamental.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
