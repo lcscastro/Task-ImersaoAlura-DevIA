@@ -1,4 +1,4 @@
-# 🧮 Calculadora Educacional de Escritório
+# 🧮 Calculadora Educacional
 
 > Uma aplicação web interativa desenvolvida com foco pedagógico para apoiar estudantes do Ensino Fundamental (6º ao 9º ano) na realização de cálculos matemáticos básicos e no entendimento intuitivo e visual do cálculo de porcentagem, frações centesimais e descontos comerciais.
 
@@ -27,7 +27,7 @@
 
 ## 🎯 Visão Geral
 
-A **Calculadora Educacional de Escritório** combina a ergonomia táctil clássica das calculadoras de mesa profissionais (com visor LCD duplo, célula solar estilizada e teclado responsivo) com um **assistente didático instantâneo**. Em vez de entregar apenas o resultado numérico como uma "caixa-preta", o sistema decompõe a operação matemática realizada, define os nomes formais de cada termo (ex.: *minuendo*, *subtraendo*, *fatores*, *quociente*) e fornece exemplos contextualizados com situações do cotidiano (compras, troco, economia no cofrinho e partilha).
+A **Calculadora Educacional** combina a ergonomia táctil clássica das calculadoras de mesa profissionais (com visor LCD duplo, célula solar estilizada e teclado responsivo) com um **assistente didático instantâneo**. Em vez de entregar apenas o resultado numérico como uma "caixa-preta", o sistema decompõe a operação matemática realizada, define os nomes formais de cada termo (ex.: *minuendo*, *subtraendo*, *fatores*, *quociente*) e fornece exemplos contextualizados com situações do cotidiano (compras, troco, economia no cofrinho e partilha).
 
 ---
 
