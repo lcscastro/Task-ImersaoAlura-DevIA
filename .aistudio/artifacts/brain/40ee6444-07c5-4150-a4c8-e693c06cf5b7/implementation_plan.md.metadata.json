@@ -1,6 +1,6 @@
 {
-  "summary":  "Plano de produto e implementação para a Calculadora Educacional de Escritório (Ensino Fundamental), estruturado com as 5 operações matemáticas, painel explicativo dinâmico de porcentagem e mini-desafios interativos na paleta Azul, Branco e Preto.",
-  "updatedAt":  "2026-10-29T16:17:13.419214839Z",
+  "summary":  "Análise estruturada e plano de resolução em etapas para o bug do cálculo incorreto na Adição (e demais operações) no Painel Pedagógico da Calculadora.",
+  "updatedAt":  "2026-10-30T11:41:36.907017233Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

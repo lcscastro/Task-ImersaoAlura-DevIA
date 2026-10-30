@@ -1,133 +1,92 @@
-# Calculadora Educacional de Escritório (Ensino Fundamental)
+# Correção do Cálculo no Painel Pedagógico (Passo a Passo e Total da Operação)
 
-Aplicação web educacional interativa desenhada no formato ergonômico de uma **calculadora clássica de escritório**, combinada com um **painel pedagógico inteligente à direita**. O objetivo é transformar cálculos matemáticos básicos (adição, subtração, multiplicação, divisão e porcentagem) em experiências visuais compreensíveis para estudantes dos anos iniciais e finais do ensino fundamental, com ênfase no entendimento real da porcentagem (fração centesimal e descontos do dia a dia) e mini-desafios de fixação.
-
----
-
-## Decisões Confirmadas com o Usuário
-
-> [!IMPORTANT]
-> As diretrizes pedagógicas e técnicas abaixo foram alinhadas e incorporadas:
-> - **Abordagem da Porcentagem**: Demonstração de passos visuais intuitivos (base 100, representação fracionária $x/100$ e cálculo de desconto/acréscimo prático real).
-> - **Interatividade do Painel Direito**: Alternância entre explicação pedagógica em tempo real do cálculo atual e aba de **Mini-desafios e perguntas rápidas** para fixação autônoma do estudante.
-> - **Integração de Linguagem**: Foco exclusivamente didático e matemático na interface, sem expor código ou comandos de programação na tela, garantindo linguagem acolhedora para crianças e adolescentes.
-> - **Identidade Visual**: Paleta rigorosa em **Azul, Branco e Preto**, simulando o chassi e as teclas táteis de uma calculadora de mesa de escritório moderna e acessível.
+Correção do cálculo em tempo real e de persistência do resultado no **Painel Educativo** da Calculadora Escolar, garantindo que a expressão matemática e a soma/total reflitam com precisão o cálculo ativo tanto durante a digitação do segundo operando quanto após o clique na tecla `=`.
 
 ---
 
-## 1. Problema que o Aplicativo Resolve & Público Principal
+## 1. Análise da Causa Raiz do Bug
 
-### 1.1. O Problema que o Aplicativo Resolve
-1. **Dificuldade na transição entre o cálculo mecânico e a compreensão conceitual**: Estudantes do ensino fundamental frequentemente usam calculadoras como caixas-pretas: obtêm o número final, mas não compreendem o que a operação fez matematicamente (ex.: por que multiplicar por $0{,}20$ equivale a $20\%$, ou por que dividir por zero não é possível).
-2. **Abstração confusa da Porcentagem**: O símbolo `%` é um dos tópicos mais desafiadores da matemática básica. Alunos costumam confundir "porcentagem como taxa" ($20\%$ de $80$) com "porcentagem como desconto comercial" ($80 - 20\%$). O app desmistifica isso transformando o cálculo em representação visual proporcional de 100 partes.
-3. **Falta de contexto prático**: Alunos perguntam "onde uso isso?". O aplicativo contextualiza cada operação com 1 a 2 exemplos concretos do cotidiano (compras, mesada, divisão de lanches, medições).
-4. **Erros de entrada e falta de controle**: Calculadoras comuns não exibem a fita de histórico nem a expressão anterior de maneira compreensível. O painel estilo escritório com display duplo dá clareza total.
+No print anexado, o usuário realizou o teste com `100 + 10`:
+- **Calculadora (Visor)**: `100 +` no topo e `10` no visor principal (antes ou logo ao teclar).
+- **Painel Lateral (Passo a Passo)**: exibiu `3. Juntando as quantidades: 100 + 10 = 100.` (incorreto, deveria ser `110`).
+- **Nomes dos Termos**: exibiu `Total ou Soma: 100` (incorreto, deveria ser `110`).
 
-### 1.2. Público Principal
-- **Alunos do Ensino Fundamental I e II (6º ao 9º ano, 10 a 14 anos)**: Estudantes aprendendo frações, decimais, operações com números naturais/racionais e porcentagem básica.
-- **Professores de Matemática e Pais/Tutores**: Instrumento de apoio em sala de aula ou tarefas de casa para demonstrar a anatomia de cada conta.
-- **Estudantes em fase de reforço escolar**: Jovens que necessitam de reforço visual e gamificação leve (mini-desafios) para consolidar a base aritmética.
-
----
-
-## 2. Requisitos Funcionais
-
-### RF01. Entrada Numérica e Teclado Tátil (0 a 9)
-- Teclado virtual simulando teclas volumétricas de calculadora de escritório (números de 0 a 9, ponto decimal e troca de sinal $\pm$).
-- Suporte completo a atalhos de teclado físico (teclas 0-9, `+`, `-`, `*`, `/`, `%`, `Enter`, `Backspace`, `Escape`).
-- Tecla `C` (Clear/Limpar tudo) e `CE` (Clear Entry/Limpar entrada atual).
-
-### RF02. As Cinco Operações Matemáticas Fundamentais
-- **Adição ($+$)**: Soma com explicação de agrupamento/adição de parcelas e total.
-- **Subtração ($-$)**: Diferença, ideia de "quanto sobra" ou "quanto falta".
-- **Multiplicação ($\times$)**: Ideia de parcelas repetidas ou área geométrica.
-- **Divisão ($\div$)**: Ideia de repartição em partes iguais; tratamento pedagógico explícito para divisão por zero ("Não é possível dividir por zero").
-- **Porcentagem ($\%$)**:
-  - Modo 1: Cálculo direto de parte centesimal ($A \times B\% \to \frac{B}{100} \text{ de } A$).
-  - Modo 2: Aplicação direta de acréscimo e desconto ($A + B\%$ ou $A - B\%$, cálculo clássico de escritório).
-
-### RF03. Painel Principal (Display de Escritório)
-- Visor duplo no estilo LCD/VFD clássico de escritório:
-  - **Sub-linha superior**: Mostra a expressão em andamento (ex: `150 × 20%`).
-  - **Linha primária com dígitos grandes e nítidos**: Exibe o valor de entrada atual ou o resultado final com formatação de milhar e precisão decimal ajustada.
-  - Indicadores de status da operação ativa (`+`, `-`, `×`, `÷`, `%`).
-  - Opção de visualizar a "fita de papel" (histórico das últimas operações realizadas na sessão).
-
-### RF04. Painel Lateral Educativo (Lado Direito)
-- **Aba 1: "Como Funciona o Cálculo" (Tempo Real)**:
-  - Explicação resumida da operação ativa em linguagem amigável para o estudante.
-  - Passo a passo visual (ex.: para $25\%$, exibe $\frac{25}{100} = 0{,}25$).
-  - Barra visual de proporção (100 blocos/barra percentual mostrando a fração preenchida).
-  - 1 a 2 exemplos práticos do cotidiano (ex.: "Um jogo de R$ 100 com 20% de desconto fica R$ 80").
-  - Termos matemáticos destacados sem jargões desnecessários: *Parcela, Minuendo, Subtraendo, Fatores, Produto, Dividendo, Divisor, Quociente*.
-- **Aba 2: "Mini-Desafios" (Perguntas Rápidas)**:
-  - Perguntas práticas geradas dinamicamente com base nas 5 operações (fáceis e intermediárias).
-  - O aluno pode resolver direto na calculadora ou selecionar a alternativa correta.
-  - Feedback imediato com comemoração e explicação do porquê da resposta.
-  - Contador de acertos consecutivos para estímulo positivo.
+### Causa Técnica Identificada:
+1. **Fallback indevido no `pedagogyEngine.ts` (linha 137)**:
+   ```typescript
+   const valA = firstOperand ?? 0;
+   const valB = secondOperand;
+   const res = calculatedResult !== null ? calculatedResult : valA; // ⚠️ BUG!
+   ```
+   Quando o estudante está digitando o segundo número (ex: `10`), ele ainda não clicou em `=` (`isResult = false`), logo `calculatedResult` chegava como `null`. O código fazia fallback para `valA` (`100`), atribuindo o resultado a `100` em vez de calcular dinamicamente `100 + 10 = 110`.
+2. **Impacto cascata em todas as 4 operações básicas**:
+   - Na adição: `100 + 10` exibia `100`.
+   - Na subtração: `100 - 10` exibia `100` (em vez de `90`).
+   - Na multiplicação: `100 × 10` exibia `100` (em vez de `1000`).
+   - Na divisão: `100 ÷ 10` exibia `100` (em vez de `10`).
+3. **Perda de contexto ao teclar `=` no `OfficeCalculator.tsx`**:
+   Ao clicar em `=`, a calculadora zerava `previousValue` e `operator` para permitir o próximo cálculo, fazendo o `useEffect` enviar `operator = null` para o painel pedagógico, reiniciando o painel em estado neutro em vez de fixar a explicação da conta recém-concluída.
 
 ---
 
-## 3. Design de UI/UX & Paleta Azul, Branco e Preto
+## 2. Estrutura da Solução em Etapas
 
-### 3.1. Direção Estética
-- **Conceito**: *Modern Office Precision*. Combina a sensação tátil confiável de uma calculadora de mesa profissional (como as famosas calculadoras de escritório japonesas) com o frescor de uma interface web educacional contemporânea.
-- **Paleta de Cores Rigorosa**:
-  - **Azul Primário (`#1D4ED8` / `#2563EB`)**: Teclas de operadores de destaque (`=`, `%`), cabeçalhos informativos, barras de progresso e botões de confirmação.
-  - **Azul Noturno / Marinho Profundo (`#0F172A` / `#1E293B`)**: Chassi estrutural do visor LCD e fundo de alto contraste para os dígitos de alta legibilidade.
-  - **Branco Puro (`#FFFFFF`)**: Superfície do corpo principal da calculadora, teclas numéricas com relevo suave e fundo dos cartões explicativos.
-  - **Preto e Cinza Escuro (`#0F172A` / `#334155`)**: Tipografia de títulos, numerais gravados nas teclas e bordas estruturais finas.
-  - **Azul Gelo Suave (`#EFF6FF`)**: Superfície de fundo geral da página para destacar os módulos em primeiro plano.
+### Etapa 1: Cálculo Dinâmico em Tempo Real no `pedagogyEngine.ts`
+- Substituir o fallback incorreto `res = calculatedResult ?? valA` pelo cálculo real da operação:
+  - Se `calculatedResult !== null`, utiliza o resultado fornecido.
+  - Se `calculatedResult === null` e houver um operador com `firstOperand !== null`, computar o resultado prévio em tempo real com `calculateOperation(valA, operator, valB)`.
+  - Tratamento seguro de casas decimais e precisão numérica (`formatDisplayNumber` / arredondamento flutuante).
+  - Atualização dos passos e termos para refletir com exatidão:
+    - Adição: `Total ou Soma = valA + valB`
+    - Subtração: `Resto ou Diferença = valA - valB`
+    - Multiplicação: `Produto = valA × valB`
+    - Divisão: `Quociente = valA ÷ valB` (com proteção contra divisão por zero)
 
-### 3.2. Ergonomia e Disposição Espacial (Split Layout)
-- **Container Desktop (1440px / centralizado)**:
-  - **Lado Esquerdo**: Corpo da Calculadora de Escritório com visor angular inclinado, pés de borracha estilizados, teclado numérico ergonômico 4x5 e fita de papel retrátil.
-  - **Lado Direito**: Painel de Aprendizado com cabeçalho limpo, seletor de abas ("Explicador" / "Desafios"), área de decomposição matemática da operação e cartões de aplicação prática.
+### Etapa 2: Preservação do Contexto da Operação no `OfficeCalculator.tsx`
+- Criar um estado local `lastExecutedOperation` que armazena os operandos e o resultado da operação após o clique em `=`:
+  ```typescript
+  {
+    first: number;
+    operator: Operator;
+    second: number;
+    result: number;
+    isPercent: boolean;
+  }
+  ```
+- Ao teclar `=`, em vez de enviar `operator: null` ao painel pedagógico, enviar a operação recém-calculada com `result` preenchido.
+- Se o estudante começar a digitar um novo número, o painel transita suavemente para a nova operação.
+
+### Etapa 3: Revisão e Atualização dos Exemplos do Cotidiano
+- Garantir que os cartões de exemplos práticos no painel utilizem os números atuais digitados pelo estudante sempre que aplicável, mantendo a contextualização pedagógica coerente.
+
+### Etapa 4: Validação e Testes
+- Testar a sequência exata do print: `100` $\to$ `+` $\to$ `10`:
+  - Verificar se o passo a passo exibe `100 + 10 = 110`.
+  - Verificar se o campo `Total ou Soma` exibe `110`.
+- Testar o clique no botão `=`:
+  - Verificar se o display mantém `110` e o painel conserva a explicação da adição.
+- Testar as demais operações (`-`, `×`, `÷`, `%`).
+- Executar linting e compilação do applet.
 
 ---
 
-## 4. Critérios para Testar a Primeira Versão (Plano de Testes)
-
-| ID | Área | Caso de Teste | Ação Executada | Resultado Esperado |
-|---|---|---|---|---|
-| **CT01** | Operações Básicas | Adição simples e acumulada | Pressionar `12 + 8 =` | Visor exibe `20`; painel direito explica o conceito de parcelas e soma com exemplo prático. |
-| **CT02** | Operações Básicas | Subtração com valor negativo | Pressionar `15 - 20 =` | Visor exibe `-5`; explicação aborda números inteiros/saldo negativo. |
-| **CT03** | Operações Básicas | Multiplicação decimal | Pressionar `4.5 × 2 =` | Visor exibe `9`; painel explica multiplicação como adição repetida. |
-| **CT04** | Operações Básicas | Divisão com decimais | Pressionar `10 ÷ 4 =` | Visor exibe `2.5`; explicação divide o conceito em partes iguais. |
-| **CT05** | Caso Limite | Divisão por Zero | Pressionar `8 ÷ 0 =` | Visor exibe aviso amigável (`Indeterminado`); painel explica por que não é possível dividir por zero na matemática. |
-| **CT06** | Porcentagem | Cálculo de Porcentagem Simples | Digitar `200 × 15 %` | Visor calcula `30`; painel exibe a fração $\frac{15}{100}$ aplicada a $200$ e a barra percentual preenchida até $15\%$. |
-| **CT07** | Porcentagem | Desconto Comercial | Digitar `100 - 20 % =` | Visor exibe `80`; painel contextualiza: "Preço original: R$ 100, Desconto: R$ 20, Preço final: R$ 80". |
-| **CT08** | Interatividade | Mini-Desafio Educativo | Clicar em "Novo Desafio" na aba direita | Apresenta uma pergunta do tipo: "Se uma pizza tem 8 fatias e você comeu 2, qual a porcentagem?"; ao responder, fornece feedback imediato. |
-| **CT09** | Acessibilidade | Teclado Físico | Digitar números e operadores pelo teclado físico do computador | Teclas virtuais mostram feedback visual de pressão e valores são inseridos instantaneamente. |
-| **CT10** | Design UI/UX | Contraste e Paleta Azul/Branco/Preto | Inspecionar elementos em telas normais e móveis | Cores estritamente alinhadas, legibilidade WCAG AA e layout sem quebras em diferentes resoluções. |
-
----
-
-## 5. Arquitetura Técnica do Frontend
+## 3. Diagrama do Fluxo Corrigido
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        App Container (Layout)                         │
-│   ┌──────────────────────────────┐  ┌───────────────────────────────┐ │
-│   │   Calculadora de Mesa        │  │   Painel Educativo Direito    │ │
-│   │   (Office Chassis)           │  │   (Concept & Challenges)      │ │
-│   │ ┌──────────────────────────┐ │  │ ┌───────────────────────────┐ │ │
-│   │ │ Dual LCD Display         │ │  │ │ Abas: Explicação | Desafio│ │ │
-│   │ │ (Histórico + Dígitos)    │ │  │ ├───────────────────────────┤ │ │
-│   │ ├──────────────────────────┤ │  │ │ Decomposição Fracionária  │ │ │
-│   │ │ Teclado Tátil Numérico   │ │  │ │ Barra Visual de Porcent.  │ │ │
-│   │ │ [0-9, ., C, CE, ±]       │ │  │ │ Exemplos Práticos do Real │ │ │
-│   │ ├──────────────────────────┤ │  │ │ Mini-Quiz Interativo      │ │ │
-│   │ │ Teclas Operadores (+-×÷%)│ │  │ └───────────────────────────┘ │ │
-│   │ └──────────────────────────┘ │  └───────────────────────────────┘ │
-│   └──────────────────────────────┘                                    │
-└────────────────────────────────────────────────────────────────────────┘
+[ Usuário digita: 100 ]
+         │
+         ▼
+[ Clica em '+' ] ──────► previousValue = 100, operator = '+'
+         │
+         ▼
+[ Usuário digita: 10 ] ──► currentValue = 10
+         │
+         ├───► pedagogyEngine calcula em tempo real:
+         │     calculateOperation(100, '+', 10) = 110
+         │     Passo a Passo: "100 + 10 = 110"
+         │     Total ou Soma: "110"  ✅
+         │
+         ▼
+[ Usuário clica em '=' ] ──► lastExecutedOperation preserva (100 + 10 = 110)
+         │                   Painel mantém a explicação completa sem piscar ou resetar! ✅
 ```
-
-- **Estado Centralizado (`useCalculatorState`)**:
-  - Armazena buffer de entrada, acumulador anterior, operador selecionado, histórico recente e status de erro.
-  - Emite eventos de cálculo que alimentam o motor didático em sincronia instantânea.
-- **Motor Pedagógico (`pedagogyEngine.ts`)**:
-  - Gera as explicações textuais, etapas da fração, representação decimal e os exemplos da vida real de acordo com a operação e os números digitados.
-- **Gerador de Desafios (`challengeEngine.ts`)**:
-  - Cria problemas contextualizados por nível de dificuldade para incentivar a prática do estudante.

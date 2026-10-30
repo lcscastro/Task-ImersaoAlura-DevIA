@@ -16,6 +16,14 @@ interface OfficeCalculatorProps {
   onClearPreset?: () => void;
 }
 
+interface CompletedOperation {
+  first: number;
+  operator: Operator;
+  second: number;
+  result: number;
+  isPercent: boolean;
+}
+
 export const OfficeCalculator: React.FC<OfficeCalculatorProps> = ({
   onStateChange,
   onSelectOperationForExplanation,
@@ -31,6 +39,7 @@ export const OfficeCalculator: React.FC<OfficeCalculatorProps> = ({
   const [history, setHistory] = useState<CalculatorState['history']>([]);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(false);
   const [lastKeyPressed, setLastKeyPressed] = useState<string | null>(null);
+  const [lastCompletedOperation, setLastCompletedOperation] = useState<CompletedOperation | null>(null);
 
   // Sintetizador de som mecânico sutil para as teclas (Web Audio API nativo)
   const playClickSound = useCallback(() => {
@@ -66,13 +75,24 @@ export const OfficeCalculator: React.FC<OfficeCalculatorProps> = ({
     };
     onStateChange(state);
 
+    if (isResult && lastCompletedOperation) {
+      onSelectOperationForExplanation(
+        lastCompletedOperation.first,
+        lastCompletedOperation.operator,
+        lastCompletedOperation.second,
+        lastCompletedOperation.result,
+        lastCompletedOperation.isPercent
+      );
+      return;
+    }
+
     const first = previousValue !== null ? parseNumber(previousValue) : null;
     const second = parseNumber(currentValue);
     const resultNum = isResult ? parseNumber(currentValue) : null;
     const isPercent = operator === '%';
 
     onSelectOperationForExplanation(first, operator, second, resultNum, isPercent);
-  }, [currentValue, previousValue, operator, expression, isResult, error, history, onStateChange, onSelectOperationForExplanation]);
+  }, [currentValue, previousValue, operator, expression, isResult, error, history, lastCompletedOperation, onStateChange, onSelectOperationForExplanation]);
 
   // Aplicação de cálculo pré-definido (vindo dos mini-desafios)
   useEffect(() => {
@@ -97,6 +117,7 @@ export const OfficeCalculator: React.FC<OfficeCalculatorProps> = ({
     setCurrentValue((prev) => {
       if (isResult) {
         setIsResult(false);
+        setLastCompletedOperation(null);
         setExpression('');
         return digit;
       }
@@ -118,6 +139,7 @@ export const OfficeCalculator: React.FC<OfficeCalculatorProps> = ({
     setCurrentValue((prev) => {
       if (isResult) {
         setIsResult(false);
+        setLastCompletedOperation(null);
         setExpression('');
         return '0.';
       }
@@ -146,6 +168,7 @@ export const OfficeCalculator: React.FC<OfficeCalculatorProps> = ({
     setExpression('');
     setIsResult(false);
     setError(null);
+    setLastCompletedOperation(null);
   }, [playClickSound]);
 
   // Inversão de sinal (+/-)
@@ -164,6 +187,7 @@ export const OfficeCalculator: React.FC<OfficeCalculatorProps> = ({
     playClickSound();
     setLastKeyPressed(nextOp);
     setError(null);
+    setLastCompletedOperation(null);
 
     const currentNum = parseNumber(currentValue);
 
@@ -234,6 +258,14 @@ export const OfficeCalculator: React.FC<OfficeCalculatorProps> = ({
         timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
       };
 
+      setLastCompletedOperation({
+        first: prevNum,
+        operator: '%',
+        second: currentNum,
+        result: calc.result,
+        isPercent: true,
+      });
+
       setHistory((prev) => [historyItem, ...prev].slice(0, 15));
       setExpression(`${formatDisplayNumber(prevNum)} ${opSymbol} ${formatDisplayNumber(currentNum)}%`);
       setCurrentValue(calc.displayResult);
@@ -252,6 +284,14 @@ export const OfficeCalculator: React.FC<OfficeCalculatorProps> = ({
       operator: '%',
       timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
     };
+
+    setLastCompletedOperation({
+      first: 100,
+      operator: '%',
+      second: currentNum,
+      result: resultVal,
+      isPercent: true,
+    });
 
     setHistory((prev) => [historyItem, ...prev].slice(0, 15));
     setExpression(`${formatDisplayNumber(currentNum)}% =`);
@@ -279,13 +319,21 @@ export const OfficeCalculator: React.FC<OfficeCalculatorProps> = ({
     }
 
     const opSymbol = operator === '*' ? '×' : operator === '/' ? '÷' : operator;
-    const historyItem = {
+    const historyItem: HistoryEntry = {
       id: Math.random().toString(36).substring(2, 9),
       expression: `${formatDisplayNumber(prevNum)} ${opSymbol} ${formatDisplayNumber(currentNum)}`,
       result: formatDisplayNumber(calc.displayResult),
       operator,
       timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
     };
+
+    setLastCompletedOperation({
+      first: prevNum,
+      operator,
+      second: currentNum,
+      result: calc.result,
+      isPercent: false,
+    });
 
     setHistory((prev) => [historyItem, ...prev].slice(0, 15));
     setExpression(`${formatDisplayNumber(prevNum)} ${opSymbol} ${formatDisplayNumber(currentNum)} =`);
